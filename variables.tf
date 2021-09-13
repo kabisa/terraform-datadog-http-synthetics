@@ -126,3 +126,22 @@ variable "request_headers" {
   type    = map(string)
   default = {}
 }
+
+variable "expected_response_time" {
+  type    = number
+  default = null
+}
+
+variable "expected_string" {
+  type    = string
+  default = null
+}
+
+variable "expected_json" {
+  default = null
+}
+
+variable "expected_json_path" {
+  type    = string
+  default = "."
+}

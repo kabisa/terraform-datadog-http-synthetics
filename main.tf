@@ -41,14 +41,38 @@ locals {
   ]
 
   # build assertions list
-  assertions = var.expected_status_code != null ? [
+  assertions_1 = var.expected_status_code != null ? [
     {
       operator = "is"
       target   = tostring(var.expected_status_code)
       type     = "statusCode"
     }
   ] : []
-
+  assertions_2 = concat(var.expected_response_time != null ? [
+    {
+      operator = "lessThan"
+      target   = tostring(var.expected_response_time)
+      type     = "responseTime"
+    }
+  ] : [], local.assertions_1)
+  assertions_3 = concat(var.expected_string != null ? [
+    {
+      operator = "contains"
+      target   = var.expected_string
+      type     = "body"
+    }
+  ] : [], local.assertions_2)
+  assertions = concat(var.expected_string != null ? [
+    {
+      operator = "validatesJSONPath"
+      target = {
+        "jsonPath"    = var.expected_json_path
+        "operator"    = "contains"
+        "targetValue" = var.expected_json
+      }
+      type = "body"
+    }
+  ] : [], local.assertions_3)
 }
 
 
