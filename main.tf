@@ -62,7 +62,7 @@ locals {
       type     = "body"
     }
   ] : [], local.assertions_2)
-  assertions = concat(var.expected_string != null ? [
+  assertions = concat(var.expected_json != null ? [
     {
       operator = "validatesJSONPath"
       target = {
