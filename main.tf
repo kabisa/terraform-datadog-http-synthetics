@@ -43,34 +43,36 @@ locals {
   # build assertions list
   assertions_1 = var.expected_status_code != null ? [
     {
-      operator = "is"
-      target   = tostring(var.expected_status_code)
-      type     = "statusCode"
+      operator       = "is"
+      target         = tostring(var.expected_status_code)
+      type           = "statusCode"
+      targetjsonpath = []
     }
   ] : []
   assertions_2 = concat(var.expected_response_time != null ? [
     {
-      operator = "lessThan"
-      target   = tostring(var.expected_response_time)
-      type     = "responseTime"
+      operator       = "lessThan"
+      target         = tostring(var.expected_response_time)
+      type           = "responseTime"
+      targetjsonpath = []
     }
   ] : [], local.assertions_1)
   assertions_3 = concat(var.expected_string != null ? [
     {
-      operator = "contains"
-      target   = var.expected_string
-      type     = "body"
+      operator       = "contains"
+      target         = var.expected_string
+      type           = "body"
+      targetjsonpath = []
     }
   ] : [], local.assertions_2)
-  assertions = concat(local.assertions_3, var.additional_assertions)
-
-  json_assertions = concat(var.expected_json != null ? [
+  assertions_4 = concat(var.expected_json != null ? [
     {
       jsonpath    = var.expected_json_path
       operator    = "contains"
       targetvalue = var.expected_json
     }
-  ] : [], var.additional_json_assertions)
+  ] : [], local.assertions_3)
+  assertions = concat(local.assertions_4, var.additional_assertions)
 }
 
 
@@ -111,13 +113,16 @@ resource "datadog_synthetics_test" "generic_http_synthetic" {
   }
 
   dynamic "assertion" {
-    for_each = local.json_assertions
+    for_each = local.assertions
     content {
       operator = assertion.value["operator"]
-      targetjsonpath {
-        jsonpath    = assertion.value["jsonpath"]
-        operator    = assertion.value["operator"]
-        targetvalue = assertion.value["targetvalue"]
+      dynamic "targetjsonpath" {
+        for_each = assertion.value["targetjsonpath"]
+        content {
+          jsonpath    = targetjsonpath.value["jsonpath"]
+          operator    = targetjsonpath.value["operator"]
+          targetvalue = targetjsonpath.value["targetvalue"]
+        }
       }
       type = "body"
     }
