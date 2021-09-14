@@ -108,7 +108,7 @@ variable "retry_count" {
   default = 1
 }
 
-variable "request_interval_secs" {
+variable "retry_interval_secs" {
   type    = number
   default = 300
 }

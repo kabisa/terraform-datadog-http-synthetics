@@ -126,7 +126,7 @@ resource "datadog_synthetics_test" "generic_http_synthetic" {
 
     retry {
       count    = var.retry_count
-      interval = var.request_interval_secs
+      interval = var.retry_interval_secs
     }
   }
 
