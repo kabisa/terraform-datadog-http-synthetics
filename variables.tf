@@ -161,3 +161,9 @@ variable "actuator_components" {
   type        = list(string)
   default     = []
 }
+
+variable "sub_actuator_keyword" {
+  description = "Some actuators use different properties: components, details"
+  type        = string
+  default     = "components"
+}

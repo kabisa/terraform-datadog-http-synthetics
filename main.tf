@@ -77,7 +77,7 @@ locals {
       type     = "body"
       targetjsonpath = [
         {
-          jsonpath    = "$.components.${component}.status"
+          jsonpath    = "$.${var.sub_actuator_keyword}.${component}.status"
           operator    = "contains"
           targetvalue = "UP"
         }
