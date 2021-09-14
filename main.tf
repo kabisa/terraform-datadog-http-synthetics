@@ -107,15 +107,6 @@ resource "datadog_synthetics_test" "generic_http_synthetic" {
     for_each = local.assertions
     content {
       operator = assertion.value["operator"]
-      target   = assertion.value["target"]
-      type     = assertion.value["type"]
-    }
-  }
-
-  dynamic "assertion" {
-    for_each = local.assertions
-    content {
-      operator = assertion.value["operator"]
       dynamic "targetjsonpath" {
         for_each = assertion.value["targetjsonpath"]
         content {
