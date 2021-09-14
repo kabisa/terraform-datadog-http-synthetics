@@ -133,8 +133,9 @@ variable "request_headers" {
 }
 
 variable "expected_response_time" {
-  type    = number
-  default = null
+  description = "Milliseconds"
+  type        = number
+  default     = null
 }
 
 variable "expected_string" {
