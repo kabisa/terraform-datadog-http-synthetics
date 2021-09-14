@@ -72,7 +72,7 @@ locals {
       targetjsonpath = [
         {
           jsonpath    = var.expected_json_path
-          operator    = "contains"
+          operator    = "jsonpath"
           targetvalue = var.expected_json
         }
       ]
