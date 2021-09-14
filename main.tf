@@ -133,6 +133,7 @@ resource "datadog_synthetics_test" "generic_http_synthetic" {
   request_definition {
     method = var.request_method
     url    = var.request_url
+    body   = var.request_body
   }
 
   request_headers = var.request_headers

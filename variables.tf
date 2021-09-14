@@ -118,6 +118,11 @@ variable "request_method" {
   default = "GET"
 }
 
+variable "request_body" {
+  type    = string
+  default = null
+}
+
 variable "request_url" {
   type = string
 }
