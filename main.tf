@@ -119,7 +119,7 @@ resource "datadog_synthetics_test" "generic_http_synthetic" {
         operator    = assertion.value["operator"]
         targetvalue = assertion.value["targetvalue"]
       }
-      type = assertion.value["type"]
+      type = "body"
     }
   }
 
