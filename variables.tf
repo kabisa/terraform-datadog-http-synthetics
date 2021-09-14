@@ -151,3 +151,7 @@ variable "expected_json_path" {
   type    = string
   default = "."
 }
+
+variable "additional_assertions" {
+  default = []
+}
