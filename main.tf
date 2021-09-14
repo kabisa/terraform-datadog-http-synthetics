@@ -123,7 +123,7 @@ resource "datadog_synthetics_test" "generic_http_synthetic" {
           targetvalue = targetjsonpath.value["targetvalue"]
         }
       }
-      type = "body"
+      type = assertion.value["type"]
     }
   }
 
