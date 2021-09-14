@@ -156,6 +156,8 @@ variable "additional_assertions" {
   default = []
 }
 
-variable "additional_json_assertions" {
-  default = []
+variable "actuator_components" {
+  description = "See https://docs.spring.io/spring-boot/docs/current/actuator-api/htmlsingle/#health"
+  type        = list(string)
+  default     = []
 }

@@ -41,32 +41,26 @@ locals {
   ]
 
   # build assertions list
-  assertions_1 = var.expected_status_code != null ? [
-    {
+  assertions = concat(
+    var.expected_status_code != null ? [{
       operator       = "is"
       target         = tostring(var.expected_status_code)
       type           = "statusCode"
       targetjsonpath = []
-    }
-  ] : []
-  assertions_2 = concat(var.expected_response_time != null ? [
-    {
+    }] : [],
+    var.expected_response_time != null ? [{
       operator       = "lessThan"
       target         = tostring(var.expected_response_time)
       type           = "responseTime"
       targetjsonpath = []
-    }
-  ] : [], local.assertions_1)
-  assertions_3 = concat(var.expected_string != null ? [
-    {
+    }] : [],
+    var.expected_string != null ? [{
       operator       = "contains"
       target         = var.expected_string
       type           = "body"
       targetjsonpath = []
-    }
-  ] : [], local.assertions_2)
-  assertions_4 = concat(var.expected_json != null ? [
-    {
+    }] : [],
+    var.expected_json != null ? [{
       operator = "validatesJSONPath"
       type     = "body"
       targetjsonpath = [
@@ -77,9 +71,21 @@ locals {
         }
       ]
       target = null
-    }
-  ] : [], local.assertions_3)
-  assertions = concat(local.assertions_4, var.additional_assertions)
+    }] : [],
+    [for component in var.actuator_components : {
+      operator = "validatesJSONPath"
+      type     = "body"
+      targetjsonpath = [
+        {
+          jsonpath    = "$.components.${component}.status"
+          operator    = "contains"
+          targetvalue = "UP"
+        }
+      ]
+      target = null
+    }],
+    var.additional_assertions
+  )
 }
 
 
