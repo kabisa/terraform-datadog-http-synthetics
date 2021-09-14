@@ -62,18 +62,15 @@ locals {
       type     = "body"
     }
   ] : [], local.assertions_2)
-  assertions_4 = concat(var.expected_json != null ? [
+  assertions = concat(local.assertions_3, var.additional_assertions)
+
+  json_assertions = concat(var.expected_json != null ? [
     {
-      operator = "validatesJSONPath"
-      target = {
-        "jsonPath"    = var.expected_json_path
-        "operator"    = "contains"
-        "targetValue" = var.expected_json
-      }
-      type = "body"
+      jsonpath    = var.expected_json_path
+      operator    = "contains"
+      targetvalue = var.expected_json
     }
-  ] : [], local.assertions_3)
-  assertions = concat(local.assertions_4, var.additional_assertions)
+  ] : [], var.additional_json_assertions)
 }
 
 
@@ -110,6 +107,19 @@ resource "datadog_synthetics_test" "generic_http_synthetic" {
       operator = assertion.value["operator"]
       target   = assertion.value["target"]
       type     = assertion.value["type"]
+    }
+  }
+
+  dynamic "assertion" {
+    for_each = local.json_assertions
+    content {
+      operator = assertion.value["operator"]
+      targetjsonpath {
+        jsonpath    = assertion.value["jsonpath"]
+        operator    = assertion.value["operator"]
+        targetvalue = assertion.value["targetvalue"]
+      }
+      type = assertion.value["type"]
     }
   }
 
