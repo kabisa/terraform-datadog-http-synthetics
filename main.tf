@@ -72,7 +72,7 @@ locals {
       ]
       target = null
     }] : [],
-    length(var.actuator_components) > 0 ? [{
+    (length(var.actuator_components) > 0 || var.check_actuator_status) ? [{
       operator = "validatesJSONPath"
       type     = "body"
       targetjsonpath = [

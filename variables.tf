@@ -156,6 +156,12 @@ variable "additional_assertions" {
   default = []
 }
 
+variable "check_actuator_status" {
+  description = "Checks the global status of actuator health endpoint. Defaults to true when actuator components are measured"
+  type        = bool
+  default     = null
+}
+
 variable "actuator_components" {
   description = "See https://docs.spring.io/spring-boot/docs/current/actuator-api/htmlsingle/#health"
   type        = list(string)
