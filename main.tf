@@ -72,7 +72,9 @@ locals {
       ]
       target = null
     }] : [],
-    (length(var.actuator_components) > 0 || var.check_actuator_status) ? [{
+    # if var.check_actuator_status is null it has no effect.
+    # but when it is not null it overrules
+    ((length(var.actuator_components) > 0 || var.check_actuator_status == true) && var.check_actuator_status != false) ? [{
       operator = "validatesJSONPath"
       type     = "body"
       targetjsonpath = [
