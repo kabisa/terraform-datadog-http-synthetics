@@ -91,7 +91,8 @@ locals {
       type     = "body"
       targetjsonpath = [
         {
-          jsonpath    = "$.${var.sub_actuator_keyword}.${component}.status"
+          # if sub_actuator_keyword == "" we don't place a dot
+          jsonpath    = "$.${var.sub_actuator_keyword != "" ? concat(var.sub_actuator_keyword, ".") : ""}${component}.status"
           operator    = "contains"
           targetvalue = "UP"
         }
