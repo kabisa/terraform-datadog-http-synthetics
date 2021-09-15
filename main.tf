@@ -72,6 +72,18 @@ locals {
       ]
       target = null
     }] : [],
+    length(var.actuator_components) > 0 ? [{
+      operator = "validatesJSONPath"
+      type     = "body"
+      targetjsonpath = [
+        {
+          jsonpath    = "$.status"
+          operator    = "contains"
+          targetvalue = "UP"
+        }
+      ]
+      target = null
+    }] : [],
     [for component in var.actuator_components : {
       operator = "validatesJSONPath"
       type     = "body"
